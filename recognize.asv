@@ -1,0 +1,143 @@
+clc;
+clear all;
+close all;
+
+for kk = 0:12
+    p1=ones(16,16);
+    m=strcat('numbers\',int2str(kk),'.bmp');
+    x=imread(m,'bmp');
+
+
+    [i,j]=find(x==1);
+    imin=min(i);
+    imax=max(i);
+    jmin=min(j);
+    jmax=max(j);
+    bw1=x(imin:imax,jmin:jmax);%words segmentation
+    
+    bw1=imresize(bw1,[16,16],'nearest');
+    [i,j]=size(bw1);
+    i1=round((16-i)/2);
+    j1=round((16-j)/2);
+    p1(i1+1:i1+i,j1+1:j1+j)=bw1;
+    
+    for m=0:15
+        p(m*16+1:(m+1)*16,kk+1)=p1(1:16,m+1);
+    end
+    
+    switch kk
+        case{0,8}
+            t(kk+1)=0;
+        case{1}
+            t(kk+1)=1;
+        case{2}
+            t(kk+1)=2;
+        case{3}
+            t(kk+1)=3;
+        case{4,12}
+            t(kk+1)=4;
+        case{5}
+            t(kk+1)=5;
+        case{6}
+            t(kk+1)=6;
+        case{7}
+            t(kk+1)=7;
+        case{9}
+            t(kk+1)=9;
+        case{10}
+            t(kk+1)=10;
+        case{11}
+            t(kk+1)=11;
+    end
+end
+
+% ´´½¨ºÍÑµÁ·BPÍøÂç 
+pr(1:256,1)=0;
+pr(1:256,2)=1;
+net=newff(pr,[25 1],{'logsig' 'purelin'}, 'traingdx', 'learngdm');
+net.trainParam.epochs=250;
+net.trainParam.goal=0.001;
+net.trainParam.show=10;
+net.trainParam.lr=0.05;
+net=train(net,p,t);
+
+save E52net net;
+
+Rchar=[0,0,0,0,0,0,0];
+for kk = 0:6
+    disp(kk)
+    p(1:256,1)=1;
+    p1=ones(16,16);
+    load E52net net;
+    
+    m=strcat(int2str(kk),'.bmp');
+    x=imread(m,'bmp');
+
+    [i,j]=find(x==0);
+    imin=min(i);
+    imax=max(i);
+    jmin=min(j);
+    jmax=max(j);
+    bw1=x(imin:imax,jmin:jmax);%words segmentation
+    
+    bw1=imresize(bw1,[16,16],'nearest');
+    m=strcat('num',int2str(kk),'.bmp');
+    imwrite(bw1,m)
+    %subplot(3,3,kk+1); imshow(bw1);
+     [i,j]=size(bw1);
+    i1=round((16-i)/2);
+    j1=round((16-j)/2);
+    p1(i1+1:i1+i,j1+1:j1+j)=bw1;
+    
+    for m=0:15
+        p(m*16+1:(m+1)*16,1)=p1(1:16,m+1);
+    end
+    [a,Pf,Af]=sim(net,p);
+
+    a=round(a);
+    disp(a);
+    switch a(1)
+        case 0
+            Rchar(i)='0';
+            break
+        case 1
+            Rchar(i)='1';
+            break
+        case 2
+            Rchar(i)='2';
+            break
+        case 3
+            Rchar(i)='3';
+            break
+        case 4
+            Rchar(i)='4';
+            break
+        case 5
+            Rchar(i)='5';
+            break
+        case 6
+           Rchar(i)='6';
+            break
+        case 7
+           Rchar(i)='7';
+            break
+        case 8
+            Rchar(i)='8';
+            break
+        case 9
+           Rchar(i)='9';
+            break
+        case 10
+           Rchar(i)='A';
+            break
+        case 11
+            Rchar(i)='/';
+            break
+         otherwise 
+            Rchar(i)='false';
+            break
+    end
+    disp(kk)
+end
+
+ schar=[Rchar(1),Rchar(2),Rchar(3),Rchar(4)];

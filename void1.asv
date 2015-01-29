@@ -1,0 +1,15 @@
+clc, close all, clear all
+src = imread('E:\论文相关\毕业论文\img\void1.jpg');
+hu = imread('E:\论文相关\毕业论文\code\hu_void.jpg');
+bg = imcrop(src,[5,5,10,10]);
+
+%箱子的色度
+bg_hsi=rgb2hsi(bg1);
+bg_h=bg_hsi(:,:,1);
+disp(length(src))
+
+[m1,n1,g2]=size(hu);
+hu_hsi=rgb2hsi(hu);
+hu_h=hu_hsi(:, :, 1);
+subplot(2,2,2);hist(h1)
+
