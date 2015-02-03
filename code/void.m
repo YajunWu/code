@@ -13,7 +13,6 @@ h2=hsi2(:, :, 1);
 subplot(2,2,1);hist(h2)
 xlabel('（a）无互感器时图像的色调直方图');
 
-
 rgb3 = imread('E:\论文相关\毕业论文\code\hu_dao.jpg');
 [m3,n3,g3]=size(rgb3);
 hsi3=rgb2hsi(rgb3);

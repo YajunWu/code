@@ -1,0 +1,64 @@
+clc, close all, clear all
+
+
+ok=imread('E:\论文相关\毕业论文\code\img\hu_zhengmian.jpg');
+zhengmian = imread('E:\论文相关\毕业论文\code\img\hu_ok_zengqiang.jpg');
+dao = imread('E:\论文相关\毕业论文\code\img\hu_dao.jpg');
+fanxiang = imread('E:\论文相关\毕业论文\code\img\hu_fanxiang.jpg');
+
+disp('=================正常=================')
+r1=WyjMatch(ok,zhengmian);
+figure;imshow(r1.img);hold on
+disp(r1.img)
+for i=1:r1.pipei
+    plot([r1.pos1(i,2) r1.pos2(i,2)+r1.width]',[r1.pos1(i,1) r1.pos2(i,1)]','-');
+    plot([r1.pos1(i,2) r1.pos2(i,2)+r1.width]',[r1.pos1(i,1) r1.pos2(i,1)]','o');
+end
+zheng=r1.zheng/r1.key;
+fan=r1.fan/r1.key;
+if r1.pipei/r1.key>0.2 
+    if zheng>0.6 && fan<0.2
+        disp('正常')
+    else if zheng<0.05 && fan>0.05
+            disp('颠倒')
+        else
+            disp('未知情况')
+        end
+    end
+else if zheng<0.3 && fan<0.1
+        disp('倾倒');
+    else
+        disp('未知情况')
+    end
+end
+
+disp('=================颠倒=================')
+r2=WyjMatch(ok,fanxiang);
+if r2.pipei>0.2 
+    if r2.zheng>0.6 && r2.fan<0.2
+        disp('正常');
+    else if r2.zheng<0.05 && r2.fan>0.05
+            disp('颠倒')
+        else
+            disp('未知情况')
+        end
+    end
+else if r2.zheng<0.3 && r2.fan<0.1
+        disp('倾倒');
+    else
+        disp('未知情况')
+    end
+end
+
+disp('=================倾倒=================')
+WyjMatch(ok,dao);
+%{
+I=imread('E:\论文相关\毕业论文\code\hu_zhengmian.jpg');
+ % Set this option to true if you want to see more information
+   Options.verbose=false; 
+   Options.init_sample=10;
+ % Get the Key Points
+   Ipts=OpenSurf(I,Options);
+ % Draw points on the image
+   PaintSURF(I, Ipts);
+%}

@@ -1,23 +1,33 @@
 clc, close all, clear all
 
-rgb = imread('E:\论文相关\毕业论文\img\void1.jpg');
-rgb1 = imread('E:\论文相关\毕业论文\code\hu_void.jpg');
-subplot(1,2,1);imshow(rgb);
-title('无互感器时采集到的图像','position',[3.5 -1.28]);
-subplot(1,2,2);imshow(rgb1);
-title('无互感器时区域定位后的图像','position',[3.5 -1.28]);
+img = imread('E:\论文相关\毕业论文\code\numbers\0.bmp');
+
+info=regionprops(img,'BoundingBox');
+
+disp(info(1).BoundingBox);
 
 
-figure;
-rgb1 = imread('E:\论文相关\毕业论文\img\zhengmian3.jpg');
-rgb2 = imread('E:\论文相关\毕业论文\img\void1.jpg');
-rgb3 = imread('E:\论文相关\毕业论文\img\dao2.jpg');
-rgb4 = imread('E:\论文相关\毕业论文\img\fanxiang4.jpg');
-subplot(2,2,2);imshow(rgb1)
-xlabel('（b）互感器正常时的图像');
-subplot(2,2,1);imshow(rgb2)
-xlabel('（a）无互感器时的图像');
-subplot(2,2,4);imshow(rgb3)
-xlabel('（d）互感器倾倒时的图像');
-subplot(2,2,3);imshow(rgb4)
-xlabel('（c）互感器颠倒时的图像');
+
+[m,n]=size(img);
+disp(img);
+
+for x=1:m
+    for y=1:n
+        if y==n
+            img(x,y)=1;
+        else
+            img(x,y)=img(x,y+1);
+        end
+        if x==14&&y>6&&y<11
+            img(x,y)=0;
+        end
+            
+    end
+end
+
+disp(img);
+figure;imshow(img);
+rectangle('Position',info(1).BoundingBox,'LineWidth',2,'EdgeColor','r');
+rectangle('Position',info(2).BoundingBox,'LineWidth',2,'EdgeColor','g');
+
+%imwrite(img,'E:\论文相关\毕业论文\code\numbers\0.bmp')

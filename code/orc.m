@@ -54,7 +54,7 @@ threshold_ok = graythresh(gray_ok);
 binary_ok = ~im2bw(gray_ok,threshold_ok);
 subplot(2,2,4);imshow(binary_ok);title('二值图像');
 %}
-binary_ok=imread('E:\论文相关\毕业论文\code\hu_ok_binary.jpg');
+binary_ok=imread('E:\论文相关\毕业论文\code\img\hu_ok_binary.jpg');
 figure
 %截取文字部分
 %初步定位 横向定位
